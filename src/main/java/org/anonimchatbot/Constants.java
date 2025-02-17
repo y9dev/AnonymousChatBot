@@ -5,6 +5,9 @@ public class Constants {
     // insert bot token from @BotFather
     public static final String BOT_TOKEN = "";
 
+    // insert bot user without "@"
+    public static final String BOT_NAME = "";
+
     // insert chat id for sent messages from users,
     // tip: can be get from update.getMessage().getChatId();
     public static final String ADMIN_CHAT_ID = "";
@@ -13,7 +16,7 @@ public class Constants {
     public static final String superAdmin_USER_ID = "";
 
     //insert RU or EN
-    public static final String LANGUAGE = "EN";
+    public static final String LANGUAGE = "RU";
     // constants getters for status
     public static String getStatus_WAIT() {
         return "WAIT";
