@@ -193,19 +193,15 @@ public class Bot implements LongPollingSingleThreadUpdateConsumer {
                                     Database.getPerm(umessage.getFrom().getUserName()).equals(Constants.getPerm_SUPER_ADMIN()) &&
                                             userId.equals(umessage.getFrom().getUserName())) {
                                 sendMessage(chatIdAdm, Constants.getPromoteCantYourselfMessage(), umessage.getMessageId().toString());
-                            }
-                            else if (!Database.getPerm(umessage.getFrom().getUserName()).equals(Constants.getPerm_SUPER_ADMIN())) {
+                            } else if (!Database.getPerm(umessage.getFrom().getUserName()).equals(Constants.getPerm_SUPER_ADMIN())) {
                                 sendMessage(Long.parseLong(Constants.ADMIN_CHAT_ID), Constants.getPromoteNotSuperAdminMessage(), umessage.getMessageId().toString());
-                            }
-                            else if (Database.getPerm(userId).equals(Constants.getPerm_ADMIN())) {
+                            } else if (Database.getPerm(userId).equals(Constants.getPerm_ADMIN())) {
                                 sendMessage(chatIdAdm, Constants.getPromoteAlreadyAdminMessage(), umessage.getMessageId().toString());
-                            }
-                            else {
+                            } else {
                                 Database.upgradePermUser(userId);
                                 sendMessage(chatIdAdm, Constants.getPromoteSuccessMessage(), umessage.getMessageId().toString());
                             }
-                        }
-                        else if (umessage.getText().toLowerCase().startsWith(Constants.getCommandDemoteMessage())) {
+                        } else if (umessage.getText().toLowerCase().startsWith(Constants.getCommandDemoteMessage())) {
                             if (Database.getPerm(umessage.getFrom().getUserName()).equals(Constants.getPerm_ADMIN()) ||
                                     Database.getPerm(umessage.getFrom().getUserName()).equals(Constants.getPerm_SUPER_ADMIN()) &&
                                             userId.equals(umessage.getFrom().getUserName())) {
@@ -218,15 +214,17 @@ public class Bot implements LongPollingSingleThreadUpdateConsumer {
                                 Database.demotePermUser(userId);
                                 sendMessage(chatIdAdm, Constants.getDemoteSuccessMessage(), umessage.getMessageId().toString());
                             }
-                        }
-                        else if (umessage.getText().toLowerCase().startsWith(Constants.getCommandWhoYouMessage())) {
+                        } else if (umessage.getText().toLowerCase().startsWith(Constants.getCommandWhoYouMessage())) {
                             sendMessage(chatIdAdm, Constants.getCommandWhoInfoMessage()
                                     + Constants.getCommandWhoNameMessage() + userId
                                     + Constants.getCommandWhoPermMessage() + parsePerm(Database.getPerm(userId)), umessage.getMessageId().toString());
                         }
-                    }
-                    else {
-                        sendMessage(chatIdAdm, Constants.getUserNotDatabaseMessage(), umessage.getMessageId().toString());
+                    } else {
+                        if (userId.equals(Constants.BOT_NAME)) {
+                            sendMessage(chatIdAdm, Constants.getBotBannedCommandMessage(), umessage.getMessageId().toString());
+                        } else {
+                            sendMessage(chatIdAdm, Constants.getUserNotDatabaseMessage(), umessage.getMessageId().toString());
+                        }
                     }
                 }
                 else if (umessage.hasText()
@@ -378,7 +376,7 @@ public class Bot implements LongPollingSingleThreadUpdateConsumer {
         return null;
     }
     public String parsePerm(String perm) {
-        if (Constants.LANGUAGE.equals("RUS")) {
+        if (Constants.LANGUAGE.equals("RU")) {
             return switch (perm) {
                 case "USER" -> "Пользователь";
                 case "ADMIN" -> "Админ";
