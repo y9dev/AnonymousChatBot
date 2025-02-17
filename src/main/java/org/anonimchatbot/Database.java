@@ -1,6 +1,8 @@
 package org.anonimchatbot;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
 
@@ -8,11 +10,11 @@ public class Database {
 
     public static void initDatabase() {
         String sql1 = "CREATE TABLE IF NOT EXISTS users (" +
-                "chat_id TEXT NOT NULL UNIQUE, " +
-                "wait TEXT DEFAULT 'STAY' CHECK(wait IN('WAIT', 'STAY')), " +
-                "wait_messageId TEXT, " +
-                "banned TEXT DEFAULT 'PARDONED' CHECK(banned IN('BANNED', 'PARDONED'))" +
-                ");";
+                      "chat_id TEXT NOT NULL UNIQUE, " +
+                      "wait TEXT DEFAULT 'STAY' CHECK(wait IN('WAIT', 'STAY')), " +
+                      "banned TEXT DEFAULT 'PARDONED' CHECK(banned IN('BANNED', 'PARDONED')), " +
+                      "waitMessage TEXT" +
+                      ");";
         String sql2 = "CREATE TABLE IF NOT EXISTS groupMessages (" +
                 "chat_id TEXT NOT NULL, " +
                 "message_id TEXT NOT NULL" +
@@ -104,12 +106,12 @@ public class Database {
         } catch (SQLException e) { e.printStackTrace(System.err); }
     }
     public static void updMessageId(String message_id, String chat_id) {
-        String sql = "UPDATE users SET wait_messageId = ? WHERE chat_id = ?";
+        String sql = "UPDATE users SET waitMessage = ? WHERE chat_id = ?";
         try (
                 Connection c = DriverManager.getConnection(Database_URL);
                 PreparedStatement st = c.prepareStatement(sql)) {
-            st.setString(1, message_id);
             st.setString(2, chat_id);
+            st.setString(1, message_id);
             st.executeUpdate();
         } catch (SQLException e) { e.printStackTrace(System.err); }
     }
@@ -134,14 +136,14 @@ public class Database {
         } catch (SQLException e) { e.printStackTrace(System.err); }
     }
     public static String getMessageId(String chat_id) {
-        String sql = "SELECT wait_messageId FROM users WHERE chat_id = ?";
+        String sql = "SELECT waitMessage FROM users WHERE chat_id = ?";
         try (
                 Connection c = DriverManager.getConnection(Database_URL);
                 PreparedStatement st = c.prepareStatement(sql)) {
             st.setString(1, chat_id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                return rs.getString("wait_messageId");
+                return rs.getString("waitMessage");
             }
         } catch (SQLException e) { e.printStackTrace(System.err); }
         return null;

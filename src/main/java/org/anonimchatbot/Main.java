@@ -10,7 +10,7 @@ public class Main {
         Database.initDatabase();
         TelegramBotsLongPollingApplication application = new TelegramBotsLongPollingApplication();
         try {
-            application.registerBot(Constants.BOT_TOKEN, new Bot());
+                application.registerBot(Constants.BOT_TOKEN, new Bot());
             System.out.println("Bot has initialized");
         } catch (TelegramApiException e) {
             e.printStackTrace(System.err);
